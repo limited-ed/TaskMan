@@ -5,8 +5,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -20,6 +22,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.taskman.ui.main.MainScreen
 import com.example.taskman.ui.theme.TaskManTheme
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.taskman.ui.add.AddScreen
 
 
@@ -39,6 +44,13 @@ class MainActivity : ComponentActivity() {
                             title = { Text(text = "TaskMan")},
                             navigationIcon = AutoNavigationIcon(navController)
                         )
+                    },
+                    isFloatingActionButtonDocked = true,
+                    floatingActionButton = {
+                        AddButton(navController)
+                    },
+                    bottomBar = {
+                        BottomBar(navController)
                     }
                 ) {
                     NavComponent(navController)
@@ -58,4 +70,34 @@ fun NavComponent(navController: NavHostController){
             AddScreen()
         }
     }
+}
+
+@Composable
+fun AddButton(navController: NavController): Unit? {
+    val currentBackStackEntry: NavBackStackEntry? by navController.currentBackStackEntryAsState()
+    return currentBackStackEntry?.let {
+        if (currentBackStackEntry?.destination?.route=="main"){
+            FloatingActionButton(onClick = {
+                navController.navigate("add")
+            }) {
+                Icon(imageVector = Icons.Filled.Add, contentDescription = "Add" )
+            }
+
+        }
+
+    }
+
+}
+
+@Composable
+fun BottomBar(navController: NavController): Unit? {
+    val currentBackStackEntry: NavBackStackEntry? by navController.currentBackStackEntryAsState()
+    return currentBackStackEntry?.let {
+        if (currentBackStackEntry?.destination?.route=="main"){
+            BottomAppBar(cutoutShape = MaterialTheme.shapes.small.copy(
+                CornerSize(percent = 50))){}
+        }
+
+    }
+
 }
