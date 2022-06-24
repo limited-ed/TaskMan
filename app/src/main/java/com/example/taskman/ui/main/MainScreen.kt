@@ -7,11 +7,13 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
+import com.example.taskman.data.TodoRepository
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MainScreen(navController: NavController){
+    val repository = TodoRepository()
     Scaffold {
-        TodoList(itemsList = listOf("111","2222","2333"))
+        TodoList(itemsList = repository.getAllTodo())
     }
 }
