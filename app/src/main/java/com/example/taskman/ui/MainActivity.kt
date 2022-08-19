@@ -25,10 +25,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.taskman.data.TodoRepository
 import com.example.taskman.ui.add.AddScreen
+import com.example.taskman.viewmodel.TodoViewModel
 
 
 class MainActivity : ComponentActivity() {
+
+    private val vm = TodoViewModel(TodoRepository());
+
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +58,7 @@ class MainActivity : ComponentActivity() {
                         BottomBar(navController)
                     }
                 ) {
-                    NavComponent(navController)
+                    NavComponent(navController, vm)
                 }
             }
         }
@@ -61,10 +66,10 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun NavComponent(navController: NavHostController){
+fun NavComponent(navController: NavHostController, vm: TodoViewModel){
     NavHost(navController = navController, startDestination = "main"){
         composable("main") {
-            MainScreen(navController)
+            MainScreen(navController, vm)
         }
         composable("add"){
             AddScreen()
